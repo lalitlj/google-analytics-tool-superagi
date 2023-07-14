@@ -3,7 +3,7 @@ from superagi.tools.base_tool import BaseTool
 from pydantic import BaseModel, Field
 from typing import Type
 from datetime import date
-from superagi.tools.google_analytics.getMetricDimensions import getMetric, getDim
+from getMetricDimensions import getMetric, getDim
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import (
     DateRange,
@@ -35,6 +35,12 @@ class reportTool(BaseTool):
 
         m = getMetric(met)
         d = getDim(dim)
+        mi=[]
+        for x in m:
+            mi.append(Metric(name=x))
+        di = []
+        for x in d:
+            di.append(Dimension(name=x))
         request = RunReportRequest(
             property=f"properties/{pid}",
             dimensions=[Dimension(name=d[0])],

@@ -2,6 +2,7 @@ from abc import ABC
 import os
 from superagi.tools.base_tool import BaseToolkit, BaseTool
 from typing import List
+from userReport import reportTool
 
 class AnalyticsToolkit(BaseToolkit, ABC):
     name: str = "Google Analytics Toolkit"
