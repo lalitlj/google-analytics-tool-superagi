@@ -30,7 +30,7 @@ class reportTool(BaseTool):
 
     def _execute(self, met, dim, start, end):
         from_name = self.get_tool_config('GOOGLE_APPLICATION_CREDS')
-        pid=os.environ('property_id')
+        pid = os.environ['property_id']
         client = BetaAnalyticsDataClient()
 
         m = getMetric(met)
@@ -38,19 +38,27 @@ class reportTool(BaseTool):
         mi=[]
         for x in m:
             mi.append(Metric(name=x))
+        if len(m)==0:
+            return "No metric found"
         di = []
         for x in d:
             di.append(Dimension(name=x))
+            return "No dimension found"
         request = RunReportRequest(
             property=f"properties/{pid}",
-            dimensions=[Dimension(name=d[0])],
-            metrics=[Metric(name=m[0])],
+            dimensions=di,
+            metrics=mi,
             date_ranges=[DateRange(start_date=start, end_date=end)],
         )
         response = client.run_report(request)
 
         str = ""
         for row in response.rows:
-            str = str + "\n" + row.dimension_values[0].value + " " + row.metric_values[0].value
+            str = str + "\n"
+            for x in row.dimension_values:
+                str = str + x.value + " "
+
+            for x in row.metric_values:
+                str = str + x.value + " "
 
         return str
