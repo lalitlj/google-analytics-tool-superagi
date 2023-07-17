@@ -28,7 +28,7 @@ class reportTool(BaseTool):
     description: str = "Return a google analytics report for the information the user requires"
 
     def _execute(self, met, dim, start, end):
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] =os.getcwd()+"\\"+self.get_tool_config('GOOGLE_APPLICATION_CREDENTIALS')
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/google-analytics-tool-superagi/ga4api-34c2e.json"
         pid=self.get_tool_config('property_id')
         client = BetaAnalyticsDataClient()
 
