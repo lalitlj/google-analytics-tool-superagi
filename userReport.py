@@ -29,9 +29,8 @@ class reportTool(BaseTool):
     description: str = "Return a google analytics report for the information the user requires"
 
     def _execute(self, met, dim, start, end):
-        from_name = self.get_tool_config('GOOGLE_APPLICATION_CREDS')
-        # pid = os.environ['property_id']
-        pid=376881934
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = self.get_tool_config('GOOGLE_APPLICATION_CREDENTIALS')
+        pid=self.get_tool_config('property_id')
         client = BetaAnalyticsDataClient()
 
         m = getMetric(met)
