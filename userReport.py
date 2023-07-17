@@ -28,25 +28,25 @@ class reportTool(BaseTool):
     description: str = "Return a google analytics report for the information the user requires"
 
     def _execute(self, met, dim, start, end):
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = self.get_tool_config('GOOGLE_APPLICATION_CREDENTIALS')
-        pid=self.get_tool_config('property_id')
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'ga4api-34c2ef9a36e9.json'
+        pid=376881934
         client = BetaAnalyticsDataClient()
 
-        m = getMetric(met)
-        d = getDim(dim)
-        mi=[]
-        for x in m:
-            mi.append(Metric(name=x))
-        if len(m)==0:
-            return "No metric found"
-        di = []
-        for x in d:
-            di.append(Dimension(name=x))
-            return "No dimension found"
+        # m = getMetric(met)
+        # d = getDim(dim)
+        # mi=[]
+        # for x in m:
+        #     mi.append(Metric(name=x))
+        # if len(m)==0:
+        #     return "No metric found"
+        # di = []
+        # for x in d:
+        #     di.append(Dimension(name=x))
+        #     return "No dimension found"
         request = RunReportRequest(
             property=f"properties/{pid}",
-            dimensions=di,
-            metrics=mi,
+            dimensions=(Dimension(name="city")),
+            metrics=(Metric(name="activeUsers")),
             date_ranges=[DateRange(start_date=start, end_date=end)],
         )
         response = client.run_report(request)
