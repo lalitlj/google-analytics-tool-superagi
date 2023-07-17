@@ -19,6 +19,7 @@ def getMetric(self, metr: str) -> List[str]:
     prompt = """1, if given {metr} means for the number of times users added items to their shopping carts., else 0."""
     if generate(prompt,metr):
         p.append("addToCarts")
+    p.append("country")
     return p
 
 def getDim(self, dim: str) -> List[str]:
@@ -32,4 +33,5 @@ def getDim(self, dim: str) -> List[str]:
     prompt = """1, if given {dim} means the name of the marketing campaign, else 0."""
     if generate(prompt, dim):
         p.append("campaignName")
+    p.append("addToCarts")
     return p
