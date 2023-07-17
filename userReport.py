@@ -13,11 +13,10 @@ from google.analytics.data_v1beta.types import (
 )
 
 class UserReportInput(BaseModel):
-    day = date.today()
     met: str = Field(..., description="The metric the user wants to know, for example number of active users")
     dim: str = Field(..., description="The context or dimension for which the user wants to know, for example, a city")
     start: str = Field(..., description="The starting date of the query, in YYYY-MM-DD format")
-    end: str = Field(..., description=f"The last date of the query, in YYYY-MM-DD format, if today, return {day}")
+    end: str = Field(..., description=f"The last date of the query, in YYYY-MM-DD format, if today, return today's date")
 
 
 class reportTool(BaseTool):
