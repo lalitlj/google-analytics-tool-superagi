@@ -30,7 +30,8 @@ class reportTool(BaseTool):
 
     def _execute(self, met, dim, start, end):
         from_name = self.get_tool_config('GOOGLE_APPLICATION_CREDS')
-        pid = os.environ['property_id']
+        # pid = os.environ['property_id']
+        pid=376881934
         client = BetaAnalyticsDataClient()
 
         m = getMetric(met)
