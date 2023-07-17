@@ -13,8 +13,8 @@ from google.analytics.data_v1beta.types import (
 )
 
 class UserReportInput(BaseModel):
-    met: str = Field(..., description="The metric the user wants to know, for example number of active users")
-    dim: str = Field(..., description="The context or dimension for which the user wants to know, for example, a city")
+    # met: str = Field(..., description="The metric the user wants to know, for example number of active users")
+    # dim: str = Field(..., description="The context or dimension for which the user wants to know, for example, a city")
     start: str = Field(..., description="The starting date of the query, in YYYY-MM-DD format")
     end: str = Field(..., description=f"The last date of the query, in YYYY-MM-DD format, if today, return today's date")
 
@@ -27,7 +27,7 @@ class reportTool(BaseTool):
     args_schema: Type[BaseModel] = UserReportInput
     description: str = "Return a google analytics report for the information the user requires"
 
-    def _execute(self, met, dim, start, end):
+    def _execute(self, start: str, end: str):
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/google-analytics-tool-superagi/ga4api-34c2e.json"
         pid=self.get_tool_config('property_id')
         client = BetaAnalyticsDataClient()
