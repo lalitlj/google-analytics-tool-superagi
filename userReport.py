@@ -3,7 +3,7 @@ from superagi.tools.base_tool import BaseTool
 from pydantic import BaseModel, Field
 from typing import Type
 from datetime import date
-from getMetricDimensions import getMetric, getDim
+from superagi.llms.base_llm import BaseLlm
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import (
     DateRange,
@@ -33,8 +33,8 @@ class reportTool(BaseTool):
         pid=376881934
         client = BetaAnalyticsDataClient()
 
-        m = getMetric(met)
-        d = getDim(dim)
+        m = self.getMetric(met)
+        d = self.getDim(dim)
         mi=[]
         for x in m:
             mi.append(Metric(name=x))
@@ -62,3 +62,36 @@ class reportTool(BaseTool):
                 str = str + x.value + " "
 
         return str
+
+    def getMetric(self, metr: str) -> List[str]:
+        p = []
+
+        prompt = """1, if given {metr} means for the number of active users, else 0."""
+        if self.generate(prompt, metr):
+            p.append("activeUsers")
+        prompt = """1, if given {metr} means for the number of times users added items to their shopping carts., else 0."""
+        if self.generate(prompt, metr):
+            p.append("addToCarts")
+        p.append("country")
+        return p
+
+    def getDim(self, dim: str) -> List[str]:
+        p = []
+        prompt = """1, if given {dim} means names of the cities the user activity originated from, else 0."""
+        if self.generate(prompt, dim):
+            p.append("city")
+        prompt = """1, if given {dim} means the IDs of the cities the user activity originated from, else 0."""
+        if self.generate(prompt, dim):
+            p.append("cityId")
+        prompt = """1, if given {dim} means the name of the marketing campaign, else 0."""
+        if self.generate(prompt, dim):
+            p.append("campaignName")
+        p.append("addToCarts")
+        return p
+
+    def generate(self, prompt, metr) -> bool:
+        prompt = prompt.replace("{metr}", metr)
+
+        messages = [{"role": "system", "content": prompt}]
+        result = int(self.llm.chat_completion(messages, max_tokens=self.max_token_limit))
+        return result
