@@ -30,8 +30,7 @@ class reportTool(BaseTool):
 
     def _execute(self, dim: str, met: str, start: str, end: str):
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/google-analytics-tool-superagi/ga4api-34c2e.json"
-        # pid=self.get_tool_config('property_id'
-        pid=376881934
+        pid=int(self.get_tool_config('property_id'))
         client = BetaAnalyticsDataClient()
 
         m = self.getMetric(met)
@@ -74,7 +73,6 @@ class reportTool(BaseTool):
         prompt = """1 if given {metr} means the number of times users added items to shopping carts, else 0."""
         if self.generate(prompt, metr):
             p.append("addToCarts")
-        p.append("totalUsers")
         return p
 
     def getDim(self, dim: str) -> List[str]:
@@ -88,7 +86,6 @@ class reportTool(BaseTool):
         prompt = """1 if given {dim} means the name of the marketing campaign, else 0."""
         if self.generate(prompt, dim):
             p.append("campaignName")
-        p.append("country")
         return p
 
     def generate(self, prompt, metr) -> bool:
