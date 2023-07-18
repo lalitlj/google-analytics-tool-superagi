@@ -67,10 +67,10 @@ class reportTool(BaseTool):
     def getMetric(self, metr: str) -> List[str]:
         p = []
 
-        prompt = """True if given {metr} means for the number of active users, else False."""
+        prompt = """1 if given {metr} means for the number of active users, else 0."""
         if self.generate(prompt, metr):
             p.append("activeUsers")
-        prompt = """True if given {metr} means the number of times users added items to shopping carts, else False."""
+        prompt = """1 if given {metr} means the number of times users added items to shopping carts, else 0."""
         if self.generate(prompt, metr):
             p.append("addToCarts")
         p.append("totalUsers")
@@ -78,13 +78,13 @@ class reportTool(BaseTool):
 
     def getDim(self, dim: str) -> List[str]:
         p = []
-        prompt = """True if given {dim} means names of the cities the user activity originated from, else False."""
+        prompt = """1 if given {dim} means names of the cities the user activity originated from, else 0."""
         if self.generate(prompt, dim):
             p.append("city")
-        prompt = """True if given {dim} means the IDs of the cities the user activity originated from, else False."""
+        prompt = """1 if given {dim} means the IDs of the cities the user activity originated from, else 0."""
         if self.generate(prompt, dim):
             p.append("cityId")
-        prompt = """True if given {dim} means the name of the marketing campaign, else False."""
+        prompt = """1 if given {dim} means the name of the marketing campaign, else 0."""
         if self.generate(prompt, dim):
             p.append("campaignName")
         p.append("country")
