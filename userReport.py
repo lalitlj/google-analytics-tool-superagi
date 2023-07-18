@@ -45,8 +45,8 @@ class reportTool(BaseTool):
         #     return "No dimension found"
         request = RunReportRequest(
             property=f"properties/{pid}",
-            dimensions=(Dimension(name="city")),
-            metrics=(Metric(name="activeUsers")),
+            dimensions=[Dimension(name="city")],
+            metrics=[Metric(name="activeUsers")],
             date_ranges=[DateRange(start_date=start, end_date=end)],
         )
         response = client.run_report(request)
