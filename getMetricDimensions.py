@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from typing import List
 from superagi.llms.base_llm import BaseLlm
 
-def generate(self, prompt, metr)->bool:
+def generate(prompt, metr)->bool:
     prompt = prompt.replace("{metr}", metr)
 
     messages = [{"role": "system", "content": prompt}]
