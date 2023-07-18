@@ -26,6 +26,7 @@ class reportTool(BaseTool):
     name: str = "Analytics Report Tool"
     args_schema: Type[BaseModel] = UserReportInput
     description: str = "Return a google analytics report for the information the user requires"
+    llm: Optional[BaseLlm] = None
 
     def _execute(self, dim: str, met: str, start: str, end: str):
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/google-analytics-tool-superagi/ga4api-34c2e.json"
@@ -66,27 +67,27 @@ class reportTool(BaseTool):
     def getMetric(self, metr: str) -> List[str]:
         p = []
 
-        prompt = """1, if given {metr} means for the number of active users, else 0."""
+        prompt = """True if given {metr} means for the number of active users, else False."""
         if self.generate(prompt, metr):
             p.append("activeUsers")
-        prompt = """1, if given {metr} means for the number of times users added items to their shopping carts., else 0."""
+        prompt = """True if given {metr} means the number of times users added items to shopping carts, else False."""
         if self.generate(prompt, metr):
             p.append("addToCarts")
-        p.append("country")
+        p.append("totalUsers")
         return p
 
     def getDim(self, dim: str) -> List[str]:
         p = []
-        prompt = """1, if given {dim} means names of the cities the user activity originated from, else 0."""
+        prompt = """True if given {dim} means names of the cities the user activity originated from, else False."""
         if self.generate(prompt, dim):
             p.append("city")
-        prompt = """1, if given {dim} means the IDs of the cities the user activity originated from, else 0."""
+        prompt = """True if given {dim} means the IDs of the cities the user activity originated from, else False."""
         if self.generate(prompt, dim):
             p.append("cityId")
-        prompt = """1, if given {dim} means the name of the marketing campaign, else 0."""
+        prompt = """True if given {dim} means the name of the marketing campaign, else False."""
         if self.generate(prompt, dim):
             p.append("campaignName")
-        p.append("addToCarts")
+        p.append("country")
         return p
 
     def generate(self, prompt, metr) -> bool:
