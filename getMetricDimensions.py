@@ -10,7 +10,7 @@ def generate(self, prompt, metr)->bool:
     result = int(self.llm.chat_completion(messages, max_tokens=self.max_token_limit))
     return result
 
-def getMetric(self, metr: str) -> List[str]:
+def getMetric(metr: str) -> List[str]:
     p = []
 
     prompt = """1, if given {metr} means for the number of active users, else 0."""
@@ -22,7 +22,7 @@ def getMetric(self, metr: str) -> List[str]:
     p.append("country")
     return p
 
-def getDim(self, dim: str) -> List[str]:
+def getDim(dim: str) -> List[str]:
     p=[]
     prompt = """1, if given {dim} means names of the cities the user activity originated from, else 0."""
     if generate(prompt,dim):
