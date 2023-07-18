@@ -15,7 +15,7 @@ class ReportInput(BaseModel):
     # dim: str = Field(..., description="The context or dimension for which the user wants to know, for example, a city")
     # start: str = Field(..., description="The starting date of the query, in YYYY-MM-DD format")
     # end: str = Field(..., description=f"The last date of the query, in YYYY-MM-DD format, if today, return today's date")
-    pass
+    m: str = Field(..., description="What the user wishes to do")
 
 class singleUseTool(BaseTool):
     name: str = "Routine Analytics Report Tool"
