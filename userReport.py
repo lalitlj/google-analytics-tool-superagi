@@ -44,6 +44,7 @@ class reportTool(BaseTool):
         di = []
         for x in d:
             di.append(Dimension(name=x))
+        if len(d)==0:
             return "No dimension found"
         request = RunReportRequest(
             property=f"properties/{pid}",
