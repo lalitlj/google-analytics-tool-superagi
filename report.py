@@ -22,7 +22,7 @@ class singleUseTool(BaseTool):
     args_schema: Type[BaseModel] = ReportInput
     description: str = "Give routine weekly Google Analytics report"
 
-    def _execute(self):
+    def _execute(self,m: str):
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/google-analytics-tool-superagi/ga4api-34c2e.json"
         # pid=int(self.get_tool_config('property_id'))
         pid=376881934
