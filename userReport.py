@@ -94,5 +94,6 @@ class reportTool(BaseTool):
         prompt = prompt.replace("{metr}", metr)
 
         messages = [{"role": "system", "content": prompt}]
-        result = int(self.llm.chat_completion(messages, max_tokens=self.max_token_limit))
-        return result
+        result = self.llm.chat_completion(messages, max_tokens=self.max_token_limit)
+        re = int(result["content"])
+        return re
