@@ -9,17 +9,8 @@ from google.analytics.data_v1beta.types import (
     Metric,
     RunReportRequest,
 )
-
-class ReportInput(BaseModel):
-    # met: str = Field(..., description="The metric the user wants to know, for example number of active users")
-    # dim: str = Field(..., description="The context or dimension for which the user wants to know, for example, a city")
-    # start: str = Field(..., description="The starting date of the query, in YYYY-MM-DD format")
-    # end: str = Field(..., description=f"The last date of the query, in YYYY-MM-DD format, if today, return today's date")
-    m: int = Field(..., description="1, if the user has told to do something")
-
 class singleUseTool(BaseTool):
     name: str = "Routine Analytics Report Tool"
-    args_schema: Type[BaseModel] = ReportInput
     description: str = "Give routine weekly Google Analytics report"
 
     def _execute(self,m: str):
