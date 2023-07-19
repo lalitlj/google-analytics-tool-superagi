@@ -95,7 +95,7 @@ class reportTool(BaseTool):
         prompt = f"""Return a beautified tabular form of the {response}
             data structure, which contains row entries with dimension values representing a list of
             dimensions {di} and row entries containing metric values representing a list of metrics
-            {mi}."""
+            {mi}. Also brief a description of the received data in a paragraph."""
 
         prompt = prompt.replace(f"{response}", str(response))
         prompt = prompt.replace(f"{di}", str(di))
