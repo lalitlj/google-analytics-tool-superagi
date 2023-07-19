@@ -68,6 +68,12 @@ class reportTool(BaseTool):
         prompt = """1 if given {metr} means the number of times users added items to shopping carts, else 0."""
         if self.generate(prompt, metr):
             p.append("addToCarts")
+        prompt = """1 if given {metr} means the bounce rate, else 0."""
+        if self.generate(prompt, metr):
+            p.append("bounceRate")
+        prompt = """1 if given {metr} means new users, else 0."""
+        if self.generate(prompt, metr):
+            p.append("newUsers")
         return p
 
     def getDim(self, dim: str) -> List[str]:
@@ -81,6 +87,12 @@ class reportTool(BaseTool):
         prompt = """1 if given {dim} means the name of the marketing campaign, else 0."""
         if self.generate(prompt, dim):
             p.append("campaignName")
+        prompt = """1 if given {dim} means the title of the pages viewed, else 0."""
+        if self.generate(prompt, dim):
+            p.append("pageTitle")
+        prompt = """1 if given {dim} means the source of conversion event, else 0."""
+        if self.generate(prompt, dim):
+            p.append("source")
         return p
 
     def generate(self, prompt, metr) -> bool:
