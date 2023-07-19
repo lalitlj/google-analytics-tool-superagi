@@ -107,7 +107,7 @@ class singleUseTool(BaseTool):
         for x in range(min(len(ros), 5)):
             xt = xt + ros.dimension_values[0].value + " " + ros.metric_values[0].values + " " + (int(ros.metric_values[0]) / totalsessions) + "\n"
 
-        return [str, re, st, pt, xt]
+        return re+ st+ pt+ xt
 
     def sor(self, dict):
         return dict.metric_values[0].value
