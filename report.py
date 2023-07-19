@@ -13,15 +13,11 @@ class singleUseTool(BaseTool):
     name: str = "Routine Analytics Report Tool"
     description: str = "Give routine weekly Google Analytics report"
 
-    def _execute(self,m: str):
+    def _execute(self):
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/google-analytics-tool-superagi/ga4api-34c2e.json"
         # pid=int(self.get_tool_config('property_id'))
         pid=376881934
         client = BetaAnalyticsDataClient()
-
-        str=""
-        if m:
-            str=" "
 
         request = RunReportRequest(
             property=f"properties/{pid}",
