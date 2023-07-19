@@ -15,7 +15,7 @@ class ReportInput(BaseModel):
     # dim: str = Field(..., description="The context or dimension for which the user wants to know, for example, a city")
     # start: str = Field(..., description="The starting date of the query, in YYYY-MM-DD format")
     # end: str = Field(..., description=f"The last date of the query, in YYYY-MM-DD format, if today, return today's date")
-    m: str = Field(..., description="What the user wishes to do")
+    m: int = Field(..., description="1, if the user has told to do something")
 
 class singleUseTool(BaseTool):
     name: str = "Routine Analytics Report Tool"
@@ -27,6 +27,10 @@ class singleUseTool(BaseTool):
         # pid=int(self.get_tool_config('property_id'))
         pid=376881934
         client = BetaAnalyticsDataClient()
+
+        str=""
+        if m:
+            str=" "
 
         request = RunReportRequest(
             property=f"properties/{pid}",
@@ -103,7 +107,7 @@ class singleUseTool(BaseTool):
         for x in range(min(len(ros), 5)):
             xt = xt + ros.dimension_values[0].value + " " + ros.metric_values[0].values + " " + (int(ros.metric_values[0]) / totalsessions) + "\n"
 
-        return [re, st, pt, xt]
+        return [str, re, st, pt, xt]
 
     def sor(self, dict):
         return dict.metric_values[0].value
