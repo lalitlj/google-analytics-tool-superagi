@@ -1,7 +1,7 @@
 import os
 from superagi.tools.base_tool import BaseTool
 from pydantic import BaseModel, Field
-from typing import Type, List, Optional
+from typing import Type, List, Optional, Dict
 from datetime import date
 from superagi.llms.base_llm import BaseLlm
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
@@ -51,19 +51,13 @@ class reportTool(BaseTool):
             dimensions=di,
             metrics=mi,
             date_ranges=[DateRange(start_date=start, end_date=end)],
+            limit=100000,
+            offset=0,
         )
         response = client.run_report(request)
 
-        str = ""
-        for row in response.rows:
-            str = str + "\n"
-            for x in row.dimension_values:
-                str = str + x.value + " "
-
-            for x in row.metric_values:
-                str = str + x.value + " "
-
-        return str
+        # beautify
+        return self.beautify(response.rows,di,mi)
 
     def getMetric(self, metr: str) -> List[str]:
         p = []
@@ -95,4 +89,19 @@ class reportTool(BaseTool):
         messages = [{"role": "system", "content": prompt}]
         result = self.llm.chat_completion(messages, max_tokens=self.max_token_limit)
         re = int(result["content"])
+        return re
+
+    def beautify(self,response: List[Dict[str,List[Dict[str,str]]]], di: List[str], mi: List[str]):
+        prompt = f"""Return a beautified tabular form of the {response}
+            data structure, which contains row entries with dimension values representing a list of
+            dimensions {di} and row entries containing metric values representing a list of metrics
+            {mi}."""
+
+        prompt = prompt.replace(f"{response}", str(response))
+        prompt = prompt.replace(f"{di}", str(di))
+        prompt = prompt.replace(f"{mi}", str(mi))
+
+        messages = [{"role": "system", "content": prompt}]
+        result = self.llm.chat_completion(messages, max_tokens=self.max_token_limit)
+        re = result["content"]
         return re
