@@ -62,7 +62,7 @@ class reportTool(BaseTool):
     def getMetric(self, metr: str) -> List[str]:
         p = []
 
-        file = open("met.txt", "r")
+        file = open(os.getcwd()+"\\met.txt", "r")
         li=file.readlines()
 
         for str in li:
@@ -88,7 +88,7 @@ class reportTool(BaseTool):
     def getDim(self, dim: str) -> List[str]:
         p = []
 
-        file = open("met.txt", "r")
+        file = open(os.getcwd()+"\\dim.txt", "r")
         li = file.readlines()
 
         for str in li:
