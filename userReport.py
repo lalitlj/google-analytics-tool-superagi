@@ -62,40 +62,57 @@ class reportTool(BaseTool):
     def getMetric(self, metr: str) -> List[str]:
         p = []
 
-        prompt = """1 if given {metr} means for the number of active users, else 0."""
-        if self.generate(prompt, metr):
-            p.append("activeUsers")
-        prompt = """1 if given {metr} means the number of times users added items to shopping carts, else 0."""
-        if self.generate(prompt, metr):
-            p.append("addToCarts")
-        prompt = """1 if given {metr} means the bounce rate, else 0."""
-        if self.generate(prompt, metr):
-            p.append("bounceRate")
-        prompt = """1 if given {metr} means new users, else 0."""
-        if self.generate(prompt, metr):
-            p.append("newUsers")
+        file = open("met.txt", "r")
+        li=file.readlines()
+
+        for str in li:
+            prompt = """1 if given {metr} stands for {str}"""
+            if self.generate(prompt,str[:-2]):
+                p.append(str[:-2])
+
+        # prompt = """1 if given {metr} means for the number of active users, else 0."""
+        # if self.generate(prompt, metr):
+        #     p.append("activeUsers")
+        # prompt = """1 if given {metr} means the number of times users added items to shopping carts, else 0."""
+        # if self.generate(prompt, metr):
+        #     p.append("addToCarts")
+        # prompt = """1 if given {metr} means the bounce rate, else 0."""
+        # if self.generate(prompt, metr):
+        #     p.append("bounceRate")
+        # prompt = """1 if given {metr} means new users, else 0."""
+        # if self.generate(prompt, metr):
+        #     p.append("newUsers")
         return p
 
     def getDim(self, dim: str) -> List[str]:
         p = []
-        prompt = """1 if given {dim} means names of the cities the user activity originated from, else 0."""
-        if self.generate(prompt, dim):
-            p.append("city")
-        prompt = """1 if given {dim} means the IDs of the cities the user activity originated from, else 0."""
-        if self.generate(prompt, dim):
-            p.append("cityId")
-        prompt = """1 if given {dim} means the name of the marketing campaign, else 0."""
-        if self.generate(prompt, dim):
-            p.append("campaignName")
-        prompt = """1 if given {dim} means the title of the pages viewed, else 0."""
-        if self.generate(prompt, dim):
-            p.append("pageTitle")
-        prompt = """1 if given {dim} means the source of conversion event, else 0."""
-        if self.generate(prompt, dim):
-            p.append("source")
+
+        file = open("met.txt", "r")
+        li = file.readlines()
+
+        for str in li:
+            prompt = """1 if given {metr} stands for {str}"""
+            if self.generate(prompt, str[:-2]):
+                p.append(str[:-2])
+
+        # prompt = """1 if given {dim} means names of the cities the user activity originated from, else 0."""
+        # if self.generate(prompt, dim):
+        #     p.append("city")
+        # prompt = """1 if given {dim} means the IDs of the cities the user activity originated from, else 0."""
+        # if self.generate(prompt, dim):
+        #     p.append("cityId")
+        # prompt = """1 if given {dim} means the name of the marketing campaign, else 0."""
+        # if self.generate(prompt, dim):
+        #     p.append("campaignName")
+        # prompt = """1 if given {dim} means the title of the pages viewed, else 0."""
+        # if self.generate(prompt, dim):
+        #     p.append("pageTitle")
+        # prompt = """1 if given {dim} means the source of conversion event, else 0."""
+        # if self.generate(prompt, dim):
+        #     p.append("source")
         return p
 
-    def generate(self, prompt, metr) -> bool:
+    def generate(self, prompt, metr: str) -> bool:
         prompt = prompt.replace("{metr}", metr)
 
         messages = [{"role": "system", "content": prompt}]
