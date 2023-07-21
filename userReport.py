@@ -66,9 +66,10 @@ class reportTool(BaseTool):
         li=file.readlines()
 
         for str in li:
+            str=str.rstrip('\n')
             prompt = """1 if given {metr} stands for {str}"""
-            if self.generate(prompt,str[:-2]):
-                p.append(str[:-2])
+            if self.generate(prompt,str):
+                    p.append(str)
 
         # prompt = """1 if given {metr} means for the number of active users, else 0."""
         # if self.generate(prompt, metr):
@@ -91,9 +92,10 @@ class reportTool(BaseTool):
         li = file.readlines()
 
         for str in li:
-            prompt = """1 if given {metr} stands for {str}"""
-            if self.generate(prompt, str[:-2]):
-                p.append(str[:-2])
+            str=str.rstrip('\n')
+            prompt = """1 if given {dim} stands for {str}"""
+            if self.generate(prompt, str):
+                p.append(str)
 
         # prompt = """1 if given {dim} means names of the cities the user activity originated from, else 0."""
         # if self.generate(prompt, dim):
