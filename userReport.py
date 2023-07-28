@@ -29,9 +29,9 @@ class reportTool(BaseTool):
     llm: Optional[BaseLlm] = None
 
     def _execute(self, dim: str, met: str, start: str, end: str):
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/google-analytics-tool-superagi/ga4api-34c2e.json"
-        # pid=int(self.get_tool_config('property_id'))
-        pid=376881934
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/external_tools/google-analytics-tool-superagi/ga4api-34c2e.json"
+        pid=self.get_tool_config("property_id")
+        #property_id_here
         client = BetaAnalyticsDataClient()
 
         m = self.getMetric(met)
@@ -70,18 +70,6 @@ class reportTool(BaseTool):
             if self.generate(prompt,str):
                     p.append(str)
 
-        # prompt = """1 if given {metr} means for the number of active users, else 0."""
-        # if self.generate(prompt, metr):
-        #     p.append("activeUsers")
-        # prompt = """1 if given {metr} means the number of times users added items to shopping carts, else 0."""
-        # if self.generate(prompt, metr):
-        #     p.append("addToCarts")
-        # prompt = """1 if given {metr} means the bounce rate, else 0."""
-        # if self.generate(prompt, metr):
-        #     p.append("bounceRate")
-        # prompt = """1 if given {metr} means new users, else 0."""
-        # if self.generate(prompt, metr):
-        #     p.append("newUsers")
         return p
 
     def getDim(self, dim: str) -> List[str]:
@@ -95,21 +83,6 @@ class reportTool(BaseTool):
             if self.generate(prompt, str):
                 p.append(str)
 
-        # prompt = """1 if given {dim} means names of the cities the user activity originated from, else 0."""
-        # if self.generate(prompt, dim):
-        #     p.append("city")
-        # prompt = """1 if given {dim} means the IDs of the cities the user activity originated from, else 0."""
-        # if self.generate(prompt, dim):
-        #     p.append("cityId")
-        # prompt = """1 if given {dim} means the name of the marketing campaign, else 0."""
-        # if self.generate(prompt, dim):
-        #     p.append("campaignName")
-        # prompt = """1 if given {dim} means the title of the pages viewed, else 0."""
-        # if self.generate(prompt, dim):
-        #     p.append("pageTitle")
-        # prompt = """1 if given {dim} means the source of conversion event, else 0."""
-        # if self.generate(prompt, dim):
-        #     p.append("source")
         return p
 
     def generate(self, prompt, metr: str) -> bool:

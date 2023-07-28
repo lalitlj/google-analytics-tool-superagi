@@ -12,4 +12,4 @@ class AnalyticsToolkit(BaseToolkit, ABC):
         return [reportTool()]
 
     def get_env_keys(self) -> List[str]:
-        return ["GOOGLE_APPLICATION_CREDENTIALS"]
+        return ["property_id"]
