@@ -97,6 +97,8 @@ class reportTool(BaseTool):
         messages = [{"role": "system", "content": prompt}]
         result = self.llm.chat_completion(messages, max_tokens=self.max_token_limit)
         re = int(result["content"])
+        print(re)
+        print('HYyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
         return re
 
     def beautify(self,response: List[Dict[str,List[Dict[str,str]]]], di: List[str], mi: List[str]):
