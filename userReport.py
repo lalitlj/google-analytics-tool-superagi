@@ -2,8 +2,7 @@ import os
 from superagi.tools.base_tool import BaseTool
 from pydantic import BaseModel, Field
 from typing import Type, List, Optional, Dict
-from datetime import date
-from time import time
+import time
 from superagi.llms.base_llm import BaseLlm
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import (
