@@ -64,11 +64,12 @@ class reportTool(BaseTool):
 
         li= ['active1DayUsers\n', 'active28DayUsers\n', 'active7DayUsers\n', 'activeUsers\n', 'adUnitExposure\n', 'addToCarts\n', 'advertiserAdClicks\n', 'advertiserAdCost\n', 'advertiserAdCostPerClick\n', 'advertiserAdCostPerConversion\n', 'advertiserAdImpressions\n', 'averagePurchaseRevenue\n', 'averagePurchaseRevenuePerPayingUser\n', 'averagePurchaseRevenuePerUser\n', 'averageRevenuePerUser\n', 'averageSessionDuration\n', 'bounceRate\n', 'cartToViewRate\n', 'checkouts\n', 'cohortActiveUsers\n', 'cohortTotalUsers\n', 'conversions\n', 'crashAffectedUsers\n', 'crashFreeUsersRate\n', 'dauPerMau\n', 'dauPerWau\n', 'ecommercePurchases\n', 'engagedSessions\n', 'engagementRate\n', 'eventCount\n', 'eventCountPerUser\n', 'eventValue\n', 'eventsPerSession\n', 'firstTimePurchaserConversionRate\n', 'firstTimePurchasers\n', 'firstTimePurchasersPerNewUser\n', 'grossItemRevenue\n', 'grossPurchaseRevenue\n', 'itemListClickEvents\n', 'itemListClickThroughRate\n', 'itemListViewEvents\n', 'itemPromotionClickThroughRate\n', 'itemRefundAmount\n', 'itemRevenue\n', 'itemViewEvents\n', 'itemsAddedToCart\n', 'itemsCheckedOut\n', 'itemsClickedInList\n', 'itemsClickedInPromotion\n', 'itemsPurchased\n', 'itemsViewed\n', 'itemsViewedInList\n', 'itemsViewedInPromotion\n', 'newUsers\n', 'organicGoogleSearchAveragePosition\n', 'organicGoogleSearchClickThroughRate\n', 'organicGoogleSearchClicks\n', 'organicGoogleSearchImpressions\n', 'promotionClicks\n', 'promotionViews\n', 'publisherAdClicks\n', 'publisherAdImpressions\n', 'purchaseRevenue\n', 'purchaseToViewRate\n', 'purchaserConversionRate\n', 'refundAmount\n', 'returnOnAdSpend\n', 'screenPageViews\n', 'screenPageViewsPerSession\n', 'screenPageViewsPerUser\n', 'scrolledUsers\n', 'sessionConversionRate\n', 'sessions\n', 'sessionsPerUser\n', 'shippingAmount\n', 'taxAmount\n', 'totalAdRevenue\n', 'totalPurchasers\n', 'totalRevenue\n', 'totalUsers\n', 'transactions\n', 'transactionsPerPurchaser\n', 'userConversionRate\n', 'userEngagementDuration\n', 'wauPerMau\n']
 
-        for str in li:
-            str=str.rstrip('\n')
-            prompt = """1 if given {metr} stands for {str}"""
-            if self.generate(prompt,str):
-                    p.append(str)
+        for st in li:
+            st=st.rstrip('\n')
+            prompt = """Return 1 if given {metr} stands for {st}, else return 0."""
+            prompt = prompt.replace("{metr}", metr)
+            if self.generate(prompt,st):
+                    p.append(st)
 
         return p
 
@@ -77,16 +78,17 @@ class reportTool(BaseTool):
 
         li=['achievementId\n', 'adFormat\n', 'adSourceName\n', 'adUnitName\n', 'appVersion\n', 'audienceId\n', 'audienceName\n', 'brandingInterest\n', 'browser\n', 'campaignId\n', 'campaignName\n', 'character\n', 'city\n', 'cityId\n', 'cohort\n', 'cohortNthDay\n', 'cohortNthMonth\n', 'cohortNthWeek\n', 'contentGroup\n', 'contentId\n', 'contentType\n', 'continent\n', 'continentId\n', 'country\n', 'countryId\n', 'date\n', 'dateHour\n', 'dateHourMinute\n', 'day\n', 'dayOfWeek\n', 'dayOfWeekName\n', 'defaultChannelGroup\n', 'deviceCategory\n', 'deviceModel\n', 'eventName\n', 'fileExtension\n', 'fileName\n', 'firstSessionDate\n', 'firstUserCampaignId\n', 'firstUserCampaignName\n', 'firstUserDefaultChannelGroup\n', 'firstUserGoogleAdsAccountName\n', 'firstUserGoogleAdsAdGroupId\n', 'firstUserGoogleAdsAdGroupName\n', 'firstUserGoogleAdsAdNetworkType\n', 'firstUserGoogleAdsCampaignId\n', 'firstUserGoogleAdsCampaignName\n', 'firstUserGoogleAdsCampaignType\n', 'firstUserGoogleAdsCreativeId\n', 'firstUserGoogleAdsCustomerId\n', 'firstUserGoogleAdsKeyword\n', 'firstUserGoogleAdsQuery\n', 'firstUserManualAdContent\n', 'firstUserManualTerm\n', 'firstUserMedium\n', 'firstUserSource\n', 'firstUserSourceMedium\n', 'firstUserSourcePlatform\n', 'fullPageUrl\n', 'googleAdsAccountName\n', 'googleAdsAdGroupId\n', 'googleAdsAdGroupName\n', 'googleAdsAdNetworkType\n', 'googleAdsCampaignId\n', 'googleAdsCampaignName\n', 'googleAdsCampaignType\n', 'googleAdsCreativeId\n', 'googleAdsCustomerId\n', 'googleAdsKeyword\n', 'googleAdsQuery\n', 'groupId\n', 'hostName\n', 'hour\n', 'isConversionEvent\n', 'isoWeek\n', 'isoYear\n', 'isoYearIsoWeek\n', 'itemAffiliation\n', 'itemBrand\n', 'itemCategory\n', 'itemCategory2\n', 'itemCategory3\n', 'itemCategory4\n', 'itemCategory5\n', 'itemId\n', 'itemListId\n', 'itemListName\n', 'itemListPosition\n', 'itemLocationID\n', 'itemName\n', 'itemPromotionCreativeName\n', 'itemPromotionCreativeSlot\n', 'itemPromotionId\n', 'itemPromotionName\n', 'itemVariant\n', 'landingPage\n', 'landingPagePlusQueryString\n', 'language\n', 'languageCode\n', 'level\n', 'linkClasses\n', 'linkDomain\n', 'linkId\n', 'linkText\n', 'linkUrl\n', 'manualAdContent\n', 'manualTerm\n', 'medium\n', 'method\n', 'minute\n', 'mobileDeviceBranding\n', 'mobileDeviceMarketingName\n', 'mobileDeviceModel\n', 'month\n', 'newVsReturning\n', 'nthDay\n', 'nthHour\n', 'nthMinute\n', 'nthMonth\n', 'nthWeek\n', 'nthYear\n', 'operatingSystem\n', 'operatingSystemVersion\n', 'operatingSystemWithVersion\n', 'orderCoupon\n', 'outbound\n', 'pageLocation\n', 'pagePath\n', 'pagePathPlusQueryString\n', 'pageReferrer\n', 'pageTitle\n', 'percentScrolled\n', 'platform\n', 'platformDeviceCategory\n', 'region\n', 'screenResolution\n', 'searchTerm\n', 'sessionCampaignId\n', 'sessionCampaignName\n', 'sessionDefaultChannelGroup\n', 'sessionGoogleAdsAccountName\n', 'sessionGoogleAdsAdGroupId\n', 'sessionGoogleAdsAdGroupName\n', 'sessionGoogleAdsAdNetworkType\n', 'sessionGoogleAdsCampaignId\n', 'sessionGoogleAdsCampaignName\n', 'sessionGoogleAdsCampaignType\n', 'sessionGoogleAdsCreativeId\n', 'sessionGoogleAdsCustomerId\n', 'sessionGoogleAdsKeyword\n', 'sessionGoogleAdsQuery\n', 'sessionManualAdContent\n', 'sessionManualTerm\n', 'sessionMedium\n', 'sessionSa360AdGroupName\n', 'sessionSa360CampaignId\n', 'sessionSa360CampaignName\n', 'sessionSa360CreativeFormat\n', 'sessionSa360EngineAccountId\n', 'sessionSa360EngineAccountName\n', 'sessionSa360EngineAccountType\n', 'sessionSa360Keyword\n', 'sessionSa360Medium\n', 'sessionSa360Query\n', 'sessionSa360Source\n', 'sessionSource\n', 'sessionSourceMedium\n', 'sessionSourcePlatform\n', 'shippingTier\n', 'signedInWithUserId\n', 'source\n', 'sourceMedium\n', 'sourcePlatform\n', 'streamId\n', 'streamName\n', 'testDataFilterId\n', 'testDataFilterName\n', 'transactionId\n', 'unifiedPagePathScreen\n', 'unifiedPageScreen\n', 'unifiedScreenClass\n', 'unifiedScreenName\n', 'userAgeBracket\n', 'userGender\n', 'videoProvider\n', 'videoTitle\n', 'videoUrl\n', 'virtualCurrencyName\n', 'visible\n', 'week\n', 'year\n', 'yearMonth\n', 'yearWeek\n']
 
-        for str in li:
-            str=str.rstrip('\n')
-            prompt = """1 if given {dim} stands for {str}"""
-            if self.generate(prompt, str):
-                p.append(str)
+        for st in li:
+            st=st.rstrip('\n')
+            prompt = """Return 1 if given {dim} stands for {str}, else return 0."""
+            prompt = prompt.replace("{dim}", dim)
+            if self.generate(prompt, st):
+                p.append(st)
 
         return p
 
-    def generate(self, prompt, metr: str) -> bool:
-        prompt = prompt.replace("{metr}", metr)
+    def generate(self, prompt, st: str) -> bool:
+        prompt = prompt.replace("{st}", st)
 
         messages = [{"role": "system", "content": prompt}]
         result = self.llm.chat_completion(messages, max_tokens=self.max_token_limit)
