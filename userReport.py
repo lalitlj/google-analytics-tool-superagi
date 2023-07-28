@@ -66,7 +66,8 @@ class reportTool(BaseTool):
 
         for st in li:
             st=st.rstrip('\n')
-            prompt = """Return 1 if given {metr} stands for {st}, else return 0."""
+            prompt = """You will only respond with either 1, or 0.
+                Return 1 if a part of the metrics {metr} refers to {st}, else return 0."""
             prompt = prompt.replace("{metr}", metr)
             if self.generate(prompt,st):
                     p.append(st)
@@ -80,7 +81,8 @@ class reportTool(BaseTool):
 
         for st in li:
             st=st.rstrip('\n')
-            prompt = """Return 1 if given {dim} stands for {str}, else return 0."""
+            prompt = """You will only respond with either 1, or 0.
+                Return 1 if a part of the dimensions {dim} refers to {st}, else return 0."""
             prompt = prompt.replace("{dim}", dim)
             if self.generate(prompt, st):
                 p.append(st)
