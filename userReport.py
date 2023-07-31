@@ -38,7 +38,7 @@ class reportTool(BaseTool):
 
         mli=m.split('\', \'')
         mli[0]=mli[0][2:]
-        mli[-1]=mli[-1][:-3]
+        mli[-1]=mli[-1][:-2]
 
         d = self.getDim(dim)
         mi=[]
@@ -54,7 +54,7 @@ class reportTool(BaseTool):
 
         dli = d.split('\', \'')
         dli[0] = dli[0][2:]
-        dli[-1] = dli[-1][:-3]
+        dli[-1] = dli[-1][:-2]
         di = []
         for x in dli:
             di.append(Dimension(name=x))
