@@ -60,18 +60,16 @@ class reportTool(BaseTool):
         if len(d)==0:
             return "No dimension found"
 
-        try:
-            request = RunReportRequest(
-                property=f"properties/{pid}",
-                dimensions=di,
-                metrics=mi,
-                date_ranges=[DateRange(start_date=start, end_date=end)],
-                limit=100000,
-                offset=0,
-            )
-            response = client.run_report(request)
-        except :
-
+        request = RunReportRequest(
+            property=f"properties/{pid}",
+            dimensions=di,
+            metrics=mi,
+            date_ranges=[DateRange(start_date=start, end_date=end)],
+            limit=100000,
+            offset=0,
+        )
+        response = client.run_report(request)
+        
         # beautify
         return self.beautify(response.rows,di,mi)
 
