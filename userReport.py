@@ -71,7 +71,7 @@ class reportTool(BaseTool):
             prompt = prompt.replace("{metr}", metr)
             if self.generate(prompt,st):
                     p.append(st)
-            time.sleep(0.01)
+            time.sleep(0.001)
 
         return p
 
@@ -87,7 +87,7 @@ class reportTool(BaseTool):
             prompt = prompt.replace("{dim}", dim)
             if self.generate(prompt, st):
                 p.append(st)
-            time.sleep(0.01)
+            time.sleep(0.001)
 
         return p
 
