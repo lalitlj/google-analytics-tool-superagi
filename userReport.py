@@ -125,7 +125,7 @@ class reportTool(BaseTool):
         return self.generate(prompt,dim)
 
 
-    def generate(self, prompt, st: str) -> bool:
+    def generate(self, prompt, st: str) -> List[str]:
         prompt = prompt.replace("{st}", st)
 
         messages = [{"role": "system", "content": prompt}]
