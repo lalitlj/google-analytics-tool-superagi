@@ -42,12 +42,15 @@ class reportTool(BaseTool):
         if len(m)==0:
             return "No metric found"
 
+        print(mi)
+
         di = []
         for x in d:
             di.append(Dimension(name=x.rstrip('\n')))
         if len(d)==0:
             return "No dimension found"
 
+        print(di)
 
         request = RunReportRequest(
             property=f"properties/{pid}",
