@@ -35,17 +35,17 @@ class reportTool(BaseTool):
         client = BetaAnalyticsDataClient()
 
         m = self.getMetric(met)
+        if len(m)==0:
+            return "No metric found"
 
         mli=m.split('\', \'')
-        mli[0]=mli[0][2:]
+        mli[0] = mli[0][mli[0].index('[')+2:]
         mli[-1]=mli[-1][:-2]
 
         mi=[]
 
         for x in mli:
             mi.append(Metric(name=x))
-        if len(m)==0:
-            return "No metric found"
 
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         print(mi)
@@ -53,17 +53,17 @@ class reportTool(BaseTool):
 
 
         d = self.getDim(dim)
+        if len(d)==0:
+            return "No dimension found"
 
         dli = d.split('\', \'')
-        dli[0] = dli[0][2:]
+        dli[0] = dli[0][dli[0].index('[')+2:]
         dli[-1] = dli[-1][:-2]
 
         di=[]
 
         for x in dli:
             di.append(Dimension(name=x))
-        if len(d)==0:
-            return "No dimension found"
 
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         print(di)
