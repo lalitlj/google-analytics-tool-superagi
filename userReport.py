@@ -47,10 +47,6 @@ class reportTool(BaseTool):
         if len(m)==0:
             return "No metric found"
 
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print(mi)
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-
         d = self.getDim(dim)
 
         dli = d.split('\', \'')
@@ -64,11 +60,6 @@ class reportTool(BaseTool):
         if len(d)==0:
             return "No dimension found"
 
-
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print(di)
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-
         request = RunReportRequest(
             property=f"properties/{pid}",
             dimensions=di,
@@ -79,25 +70,37 @@ class reportTool(BaseTool):
         )
         response = client.run_report(request)
 
+        st=""
+        for dimensionHeader in response.dimension_headers:
+            st= st+ dimensionHeader.name + " "
+        for metricHeader in response.metric_headers:
+            st= st + metricHeader.name +" "
 
+        st= st+'\n'
+
+        for row in response.rows:
+            for i, dimension_value in enumerate(row.dimension_values):
+                st = st +dimension_value.value +" "
+
+            for i, metric_value in enumerate(row.metric_values):
+                st= st+ metric_value.value+ " "
+            st = st + '\n'
 
         # beautify
-        return self.beautify(response.rows,di,mi)
+        return st
 
     def getMetric(self, metr: str) -> List[str]:
-        time.sleep(1)
-        prompt = """Take the following metrics into consideration
+        prompt = """Take the following metrics into consideration, which stands for the data required
             {st}
-            From the following metric API names, form and return a list of less than 10 metrics that correspond the best with the given metrics above. They should be a subset of the above provided dimensions. For example, if asked for active users, do not add cohortActiveUsers which has data which is unnecessary and is not queried for. Only find extremely relevant metric API name. If not found, return empty string.
+            Among the following metric API names, form and return a list of less than 10 metrics that correspond the best with the given metrics above. They should be a subset of the above provided dimensions, and not point to other data not required. For example, if asked for active users, do not add cohortActiveUsers which has data which is unnecessary and is not queried for. Only find extremely relevant metric API name. If not found, return empty string.
             ['active1DayUsers', 'active28DayUsers', 'active7DayUsers', 'activeUsers', 'adUnitExposure', 'addToCarts', 'advertiserAdClicks', 'advertiserAdCost', 'advertiserAdCostPerClick', 'advertiserAdCostPerConversion', 'advertiserAdImpressions', 'averagePurchaseRevenue', 'averagePurchaseRevenuePerPayingUser', 'averagePurchaseRevenuePerUser', 'averageRevenuePerUser', 'averageSessionDuration', 'bounceRate', 'cartToViewRate', 'checkouts', 'cohortActiveUsers', 'cohortTotalUsers', 'conversions', 'crashAffectedUsers', 'crashFreeUsersRate', 'dauPerMau', 'dauPerWau', 'ecommercePurchases', 'engagedSessions', 'engagementRate', 'eventCount', 'eventCountPerUser', 'eventValue', 'eventsPerSession', 'firstTimePurchaserConversionRate', 'firstTimePurchasers', 'firstTimePurchasersPerNewUser', 'grossItemRevenue', 'grossPurchaseRevenue', 'itemListClickEvents', 'itemListClickThroughRate', 'itemListViewEvents', 'itemPromotionClickThroughRate', 'itemRefundAmount', 'itemRevenue', 'itemViewEvents', 'itemsAddedToCart', 'itemsCheckedOut', 'itemsClickedInList', 'itemsClickedInPromotion', 'itemsPurchased', 'itemsViewed', 'itemsViewedInList', 'itemsViewedInPromotion', 'newUsers', 'organicGoogleSearchAveragePosition', 'organicGoogleSearchClickThroughRate', 'organicGoogleSearchClicks', 'organicGoogleSearchImpressions', 'promotionClicks', 'promotionViews', 'publisherAdClicks', 'publisherAdImpressions', 'purchaseRevenue', 'purchaseToViewRate', 'purchaserConversionRate', 'refundAmount', 'returnOnAdSpend', 'screenPageViews', 'screenPageViewsPerSession', 'screenPageViewsPerUser', 'scrolledUsers', 'sessionConversionRate', 'sessions', 'sessionsPerUser', 'shippingAmount', 'taxAmount', 'totalAdRevenue', 'totalPurchasers', 'totalRevenue', 'totalUsers', 'transactions', 'transactionsPerPurchaser', 'userConversionRate', 'userEngagementDuration', 'wauPerMau']"""
 
         return self.generate(prompt,metr)
 
     def getDim(self, dim: str) -> List[str]:
-        time.sleep(1)
-        prompt = """Take the following dimensions into consideration
+        prompt = """Take the following dimension into consideration, which stands for the data required
             {st}
-            From the following dimension API names, form and return a list of less than 10 dimensions that correspond the best with the given dimensions above. They should be a subset of the above provided dimensions. For example, if asked for date do not add dimensions such as dateHour, which has data which is unnecessary and is not queried for. Only find extremely relevant dimension API names. If not found, return empty string.
+            Among the following dimension API names, form and return a list of less than 10 dimensions that correspond the best with the given dimensions above. They should be a subset of the above provided dimensions, and not point to data not required. For example, if asked for date do not add dimensions such as dateHour, which has data which is unnecessary and is not queried for. Only find extremely relevant dimension API names. If not found, return empty string.
             ['achievementId', 'adFormat', 'adSourceName', 'adUnitName', 'appVersion', 'audienceId', 'audienceName', 'brandingInterest', 'browser', 'campaignId', 'campaignName', 'character', 'city', 'cityId', 'cohort', 'cohortNthDay', 'cohortNthMonth', 'cohortNthWeek', 'contentGroup', 'contentId', 'contentType', 'continent', 'continentId', 'country', 'countryId', 'date', 'dateHour', 'dateHourMinute', 'day', 'dayOfWeek', 'dayOfWeekName', 'defaultChannelGroup', 'deviceCategory', 'deviceModel', 'eventName', 'fileExtension', 'fileName', 'firstSessionDate', 'firstUserCampaignId', 'firstUserCampaignName', 'firstUserDefaultChannelGroup', 'firstUserGoogleAdsAccountName', 'firstUserGoogleAdsAdGroupId', 'firstUserGoogleAdsAdGroupName', 'firstUserGoogleAdsAdNetworkType', 'firstUserGoogleAdsCampaignId', 'firstUserGoogleAdsCampaignName', 'firstUserGoogleAdsCampaignType', 'firstUserGoogleAdsCreativeId', 'firstUserGoogleAdsCustomerId', 'firstUserGoogleAdsKeyword', 'firstUserGoogleAdsQuery', 'firstUserManualAdContent', 'firstUserManualTerm', 'firstUserMedium', 'firstUserSource', 'firstUserSourceMedium', 'firstUserSourcePlatform', 'fullPageUrl', 'googleAdsAccountName', 'googleAdsAdGroupId', 'googleAdsAdGroupName', 'googleAdsAdNetworkType', 'googleAdsCampaignId', 'googleAdsCampaignName', 'googleAdsCampaignType', 'googleAdsCreativeId', 'googleAdsCustomerId', 'googleAdsKeyword', 'googleAdsQuery', 'groupId', 'hostName', 'hour', 'isConversionEvent', 'isoWeek', 'isoYear', 'isoYearIsoWeek', 'itemAffiliation', 'itemBrand', 'itemCategory', 'itemCategory2', 'itemCategory3', 'itemCategory4', 'itemCategory5', 'itemId', 'itemListId', 'itemListName', 'itemListPosition', 'itemLocationID', 'itemName', 'itemPromotionCreativeName', 'itemPromotionCreativeSlot', 'itemPromotionId', 'itemPromotionName', 'itemVariant', 'landingPage', 'landingPagePlusQueryString', 'language', 'languageCode', 'level', 'linkClasses', 'linkDomain', 'linkId', 'linkText', 'linkUrl', 'manualAdContent', 'manualTerm', 'medium', 'method', 'minute', 'mobileDeviceBranding', 'mobileDeviceMarketingName', 'mobileDeviceModel', 'month', 'newVsReturning', 'nthDay', 'nthHour', 'nthMinute', 'nthMonth', 'nthWeek', 'nthYear', 'operatingSystem', 'operatingSystemVersion', 'operatingSystemWithVersion', 'orderCoupon', 'outbound', 'pageLocation', 'pagePath', 'pagePathPlusQueryString', 'pageReferrer', 'pageTitle', 'percentScrolled', 'platform', 'platformDeviceCategory', 'region', 'screenResolution', 'searchTerm', 'sessionCampaignId', 'sessionCampaignName', 'sessionDefaultChannelGroup', 'sessionGoogleAdsAccountName', 'sessionGoogleAdsAdGroupId', 'sessionGoogleAdsAdGroupName', 'sessionGoogleAdsAdNetworkType', 'sessionGoogleAdsCampaignId', 'sessionGoogleAdsCampaignName', 'sessionGoogleAdsCampaignType', 'sessionGoogleAdsCreativeId', 'sessionGoogleAdsCustomerId', 'sessionGoogleAdsKeyword', 'sessionGoogleAdsQuery', 'sessionManualAdContent', 'sessionManualTerm', 'sessionMedium', 'sessionSa360AdGroupName', 'sessionSa360CampaignId', 'sessionSa360CampaignName', 'sessionSa360CreativeFormat', 'sessionSa360EngineAccountId', 'sessionSa360EngineAccountName', 'sessionSa360EngineAccountType', 'sessionSa360Keyword', 'sessionSa360Medium', 'sessionSa360Query', 'sessionSa360Source', 'sessionSource', 'sessionSourceMedium', 'sessionSourcePlatform', 'shippingTier', 'signedInWithUserId', 'source', 'sourceMedium', 'sourcePlatform', 'streamId', 'streamName', 'testDataFilterId', 'testDataFilterName', 'transactionId', 'unifiedPagePathScreen', 'unifiedPageScreen', 'unifiedScreenClass', 'unifiedScreenName', 'userAgeBracket', 'userGender', 'videoProvider', 'videoTitle', 'videoUrl', 'virtualCurrencyName', 'visible', 'week', 'year', 'yearMonth', 'yearWeek']"""
 
         return self.generate(prompt,dim)
@@ -109,19 +112,3 @@ class reportTool(BaseTool):
         messages = [{"role": "system", "content": prompt}]
         result = self.llm.chat_completion(messages, max_tokens=self.max_token_limit)
         return result["content"]
-
-    def beautify(self,response: List[Dict[str,List[Dict[str,str]]]], di: List[str], mi: List[str]):
-        time.sleep(1)
-        prompt = f"""Return a beautified tabular form of the {response}
-            data structure, which contains row entries with dimension values representing a list of
-            dimensions {di} and row entries containing metric values representing a list of metrics
-            {mi}. Also brief a description of the received data in a paragraph."""
-
-        prompt = prompt.replace(f"{response}", str(response))
-        prompt = prompt.replace(f"{di}", str(di))
-        prompt = prompt.replace(f"{mi}", str(mi))
-
-        messages = [{"role": "system", "content": prompt}]
-        result = self.llm.chat_completion(messages, max_tokens=self.max_token_limit)
-        re = result["content"]
-        return re
