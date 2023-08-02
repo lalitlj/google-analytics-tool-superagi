@@ -79,10 +79,13 @@ class reportTool(BaseTool):
         )
         response = client.run_report(request)
 
+
+
         # beautify
         return self.beautify(response.rows,di,mi)
 
     def getMetric(self, metr: str) -> List[str]:
+        time.sleep(1)
         prompt = """Take the following metrics into consideration
             {st}
             From the following metric API names, form and return a list of less than 10 metrics that correspond the best with the given metrics above. They should be a subset of the above provided dimensions. For example, if asked for active users, do not add cohortActiveUsers which has data which is unnecessary and is not queried for. Only find extremely relevant metric API name. If not found, return empty string.
@@ -91,6 +94,7 @@ class reportTool(BaseTool):
         return self.generate(prompt,metr)
 
     def getDim(self, dim: str) -> List[str]:
+        time.sleep(1)
         prompt = """Take the following dimensions into consideration
             {st}
             From the following dimension API names, form and return a list of less than 10 dimensions that correspond the best with the given dimensions above. They should be a subset of the above provided dimensions. For example, if asked for date do not add dimensions such as dateHour, which has data which is unnecessary and is not queried for. Only find extremely relevant dimension API names. If not found, return empty string.
@@ -107,6 +111,7 @@ class reportTool(BaseTool):
         return result["content"]
 
     def beautify(self,response: List[Dict[str,List[Dict[str,str]]]], di: List[str], mi: List[str]):
+        time.sleep(1)
         prompt = f"""Return a beautified tabular form of the {response}
             data structure, which contains row entries with dimension values representing a list of
             dimensions {di} and row entries containing metric values representing a list of metrics
