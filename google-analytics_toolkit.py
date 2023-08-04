@@ -1,8 +1,9 @@
 from abc import ABC
 import os
-from superagi.tools.base_tool import BaseToolkit, BaseTool
+from superagi.tools.base_tool import BaseToolkit, BaseTool, ToolConfiguration
 from typing import List
 from userReport import reportTool
+from superagi.types.key_type import ToolConfigKeyType
 
 class AnalyticsToolkit(BaseToolkit, ABC):
     name: str = "Google Analytics Toolkit"
