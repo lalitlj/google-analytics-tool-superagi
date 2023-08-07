@@ -16,6 +16,6 @@ class AnalyticsToolkit(BaseToolkit, ABC):
         return [
             ToolConfiguration(key="PROPERTY_ID", key_type=ToolConfigKeyType.STRING, is_required=True,
                               is_secret=True),
-            ToolConfiguration(key="GOOGLE_APPLICATION_CREDENTIALS", key_type=ToolConfigKeyType.FILE, is_required=True,
+            ToolConfiguration(key="GOOGLE_CREDENTIALS_FILE", key_type=ToolConfigKeyType.FILE, is_required=True,
                               is_secret=False)
         ]

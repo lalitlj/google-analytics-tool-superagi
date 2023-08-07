@@ -27,8 +27,14 @@ class reportTool(BaseTool):
     llm: Optional[BaseLlm] = None
 
     def _execute(self, start: str, end: str):
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/external_tools/google-analytics-tool-superagi/ga4api-34c2e.json"
-        pid=int(self.get_tool_config("PROPERTY_ID"))
+
+        pid=self.get_tool_config("PROPERTY_ID")
+
+        f=open("JSONcontent.json","w")
+        f.write(self.get_tool_config("GOOGLE_CREDENTIALS_FILE"))
+        f.close()
+        os.environ[
+            'GOOGLE_APPLICATION_CREDENTIALS'] = "JSONcontent.json"
 
         print(
             "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
