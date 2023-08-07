@@ -28,7 +28,7 @@ class reportTool(BaseTool):
 
     def _execute(self, start: str, end: str):
 
-        pid=self.get_tool_config("PROPERTY_ID")
+        pid=int(self.get_tool_config("PROPERTY_ID"))
 
         f=open("JSONcontent.json","w")
         f.write(self.get_tool_config("GOOGLE_CREDENTIALS_FILE"))
@@ -122,7 +122,7 @@ class reportTool(BaseTool):
             st = st + '\n'
 
         # beautify
-        return st
+        return "Succesfully received a google analysis report\n"+st
 
     # def getMetric(self, metr: str) -> List[str]:
     #     prompt = """Take the following metrics into consideration, which stands for the data required
