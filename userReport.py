@@ -32,8 +32,6 @@ class reportTool(BaseTool):
 
         f=open("JSONcontent.json","w+")
         dict=self.get_tool_config("GOOGLE_CREDENTIALS_FILE")
-        print(type(dict))
-        print(dict)
         f.write(dict)
         print(f.read())
         f.close()
