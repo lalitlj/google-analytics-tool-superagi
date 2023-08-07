@@ -3,6 +3,7 @@ from superagi.tools.base_tool import BaseTool
 from pydantic import BaseModel, Field
 from typing import Type, List, Optional, Dict
 import time
+import json
 from superagi.llms.base_llm import BaseLlm
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import (
@@ -32,7 +33,9 @@ class reportTool(BaseTool):
 
         f=open("JSONcontent.json","w+")
         dict=self.get_tool_config("GOOGLE_CREDENTIALS_FILE")
-        f.write(dict)
+        d=dict
+        s=json.loads(json.loads(dict))
+        f.write(s)
         print(f.read())
         f.close()
         os.environ[
