@@ -2,30 +2,24 @@
 list:
   - Dimension:
       - country
+    Metric:
+      - totalUsers
+  - Dimension:
       - pageTitle
+    Metric:
+      - totalUsers
+  - Dimension:
       - deviceModel
       - deviceCategory
+    Metric:
+      - totalUsers
+  - Dimension:
       - dateHour
+    Metric:
+      - totalUsers
+      - averageSessionDuration
+      - bounceRate
+  - Dimension:
       - sourceMedium
     Metric:
       - totalUsers
-      - bounceRate
-#  - Dimension:
-#      - pageTitle
-#    Metric:
-#      - totalUsers
-#  - Dimension:
-#      - deviceModel
-#      - deviceCategory
-#    Metric:
-#      - totalUsers
-#  - Dimension:
-#      - dateHour
-#    Metric:
-#      - totalUsers
-#      - averageSessionDuration
-#      - bounceRate
-#  - Dimension:
-#      - sourceMedium
-#    Metric:
-#      - totalUsers
