@@ -1,6 +1,7 @@
 import os
 from superagi.tools.base_tool import BaseTool
 from pydantic import BaseModel, Field
+import json
 from typing import Type, Optional
 from superagi.resource_manager.file_manager import FileManager
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
