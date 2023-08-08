@@ -47,6 +47,7 @@ class reportTool(BaseTool):
             filename = dimensions[0]+metrics[0]
             if filename in listofnames:
                 filename=filename+"New"
+            filename=filename+".txt"
             listofnames.append(filename)
 
             mi=[]
@@ -96,6 +97,7 @@ class reportTool(BaseTool):
                 dict = yaml.parse(file)
                 for lists in dict["list"]:
                     DimMetrics.append([lists["Dimension"], lists["Metric"]])
+                return DimMetrics
         except:
             return [[['pageTitle'], ['totalUsers']], [
                 ['deviceModel', 'deviceCategory'], ['totalUsers']], [['dateHour'],
