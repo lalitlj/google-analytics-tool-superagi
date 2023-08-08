@@ -93,7 +93,7 @@ class reportTool(BaseTool):
     def returnDimMetrics(self):
         DimMetrics = []
         # try:
-        with open("superagi/tools/external-tools/google-analytics-tool-superagi/config.yaml", "r") as file:
+        with open("superagi/tools/external_tools/google-analytics-tool-superagi/config.yaml", "r") as file:
             dict = yaml.parse(file)
             for lists in dict["list"]:
                 DimMetrics.append([lists["Dimension"], lists["Metric"]])
