@@ -46,7 +46,8 @@ class reportTool(BaseTool):
         for dimensions,metrics in DimMetrics:
             filename = dimensions[0]+metrics[0]
             if filename in listofnames:
-                filename+"New"
+                filename=filename+"New"
+            listofnames.append(filename)
 
             mi=[]
             for x in metrics:
@@ -57,7 +58,7 @@ class reportTool(BaseTool):
                 di.append(Dimension(name=x))
 
             request = RunReportRequest(
-                property=f"properties/{pid}",
+                property=f"properties/{property}",
                 dimensions=di,
                 metrics=mi,
                 date_ranges=[DateRange(start_date=start, end_date=end)],
@@ -96,8 +97,8 @@ class reportTool(BaseTool):
                 for lists in dict["list"]:
                     DimMetrics.append([lists["Dimension"], lists["Metric"]])
         except:
-            return [['country'], ['totalUsers']], [['pageTitle'], ['totalUsers']], [
+            return [[['pageTitle'], ['totalUsers']], [
                 ['deviceModel', 'deviceCategory'], ['totalUsers']], [['dateHour'],
                                                                      ['totalUsers', 'averageSessionDuration',
                                                                       'bounceRate']], [['sourceMedium'],
-                                                                                       ['totalUsers']]
+                                                                                       ['totalUsers']]]
