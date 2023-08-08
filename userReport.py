@@ -29,7 +29,7 @@ class reportTool(BaseTool):
 
         pid=int(self.get_tool_config("PROPERTY_ID"))
 
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/external-tools/ga4api-34c2e.json"
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/external-tools/google-analytics-tool-superagi/ga4api-34c2e.json"
 
         client = BetaAnalyticsDataClient()
 
