@@ -28,8 +28,13 @@ class reportTool(BaseTool):
     def _execute(self, start: str, end: str):
 
         pid=int(self.get_tool_config("PROPERTY_ID"))
-
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "superagi/tools/external-tools/google-analytics-tool-superagi/ga4api-34c2e.json"
+        dict = self.get_tool_config("GOOGLE_CREDENTIALS_FILE")
+        d = dict
+        s = json.loads(json.loads(dict))
+        with open("sample.json", "w") as outfile:
+            json.dump(s, outfile)
+        os.environ[
+            'GOOGLE_APPLICATION_CREDENTIALS'] = "sample.json"
 
         client = BetaAnalyticsDataClient()
 
