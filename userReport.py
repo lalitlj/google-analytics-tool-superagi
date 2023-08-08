@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 import json
 from typing import Type, Optional
 from superagi.resource_manager.file_manager import FileManager
+import yaml
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import (
     DateRange,
@@ -28,20 +29,25 @@ class reportTool(BaseTool):
 
     def _execute(self, start: str, end: str):
 
-        pid=int(self.get_tool_config("PROPERTY_ID"))
+        property=int(self.get_tool_config("PROPERTY_ID"))
         dict = self.get_tool_config("GOOGLE_CREDENTIALS_FILE")
-        d = dict
-        s = json.loads(json.loads(dict))
+
+        writable = json.loads(json.loads(dict))
         with open("sample.json", "w") as outfile:
-            json.dump(s, outfile)
+            json.dump(writable, outfile)
         os.environ[
             'GOOGLE_APPLICATION_CREDENTIALS'] = "sample.json"
 
         client = BetaAnalyticsDataClient()
 
-        Li=[['countryUsers.txt',['country'],['totalUsers']],['pagesTraffic',['pageTitle'],['totalUsers']],['devices.txt',['deviceModel','deviceCategory'],['totalUsers']],['datehour.txt',['dateHour'],['totalUsers','averageSessionDuration','bounceRate']],['source.txt',['source'],['totalUsers']]]
+        DimMetrics = self.returnDimMetrics()
+        listofnames=[]
 
-        for filename,dimensions,metrics in Li:
+        for dimensions,metrics in DimMetrics:
+            filename = dimensions[0]+metrics[0]
+            if filename in listofnames:
+                filename+"New"
+
             mi=[]
             for x in metrics:
                 mi.append(Metric(name=x))
@@ -78,4 +84,20 @@ class reportTool(BaseTool):
 
             self.resource_manager.write_file(filename,st)
 
-        return "Succesfully wrote google analysis reports"
+        os.remove("sample.json")
+
+        return "Succesfully wrote Google Analytics reports"
+
+    def returnDimMetrics(self):
+        DimMetrics = []
+        try:
+            with open("superagi/tools/external-tools/google-analytics-tool-superagi/config.yaml", "r") as file:
+                dict = yaml.parse(file)
+                for lists in dict["list"]:
+                    DimMetrics.append([lists["Dimension"], lists["Metric"]])
+        except:
+            return [['country'], ['totalUsers']], [['pageTitle'], ['totalUsers']], [
+                ['deviceModel', 'deviceCategory'], ['totalUsers']], [['dateHour'],
+                                                                     ['totalUsers', 'averageSessionDuration',
+                                                                      'bounceRate']], [['sourceMedium'],
+                                                                                       ['totalUsers']]
