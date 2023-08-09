@@ -102,7 +102,7 @@ class reportTool(BaseTool):
         for name in listofnames:
             response=response +" "+ name+","
 
-        response[-1]='.'
+        response=response[:-1]+"."
 
         return "Succesfully wrote"+response
 
