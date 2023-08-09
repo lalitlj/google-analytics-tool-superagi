@@ -15,7 +15,8 @@ from google.analytics.data_v1beta.types import (
 
 class UserReportInput(BaseModel):
     start: str = Field(..., description="The starting date of the query, in YYYY-MM-DD format")
-    end: str = Field(..., description=f"The last date of the query, in YYYY-MM-DD format, if today, return today's date")
+    end: str = Field(..., description="The last date of the query, in YYYY-MM-DD format, if today, return today's date")
+    issinglefile: bool= Field(..., description="True if it is specified that the report should be stored in a single file. False otherwise.")
 
 
 class reportTool(BaseTool):
@@ -27,7 +28,7 @@ class reportTool(BaseTool):
     description: str = "Return a google analytics report for the information the user requires"
     resource_manager: Optional[FileManager] = None
 
-    def _execute(self, start: str, end: str):
+    def _execute(self, start: str, end: str, issinglefile: bool):
 
         property=int(self.get_tool_config("PROPERTY_ID"))
         dict = self.get_tool_config("GOOGLE_CREDENTIALS_FILE")
@@ -42,13 +43,18 @@ class reportTool(BaseTool):
 
         DimMetrics = self.returnDimMetrics()
         listofnames=[]
+        if issinglefile:
+            listofnames.append("report.txt")
+
+        report=""
 
         for dimensions,metrics in DimMetrics:
-            filename = dimensions[0]+metrics[0]
-            if filename in listofnames:
-                filename=filename+"New"
-            filename=filename+".txt"
-            listofnames.append(filename)
+            if not issinglefile:
+                filename = dimensions[0]+metrics[0]
+                if filename in listofnames:
+                    filename=filename+"New"
+                filename=filename+".txt"
+                listofnames.append(filename)
 
             mi=[]
             for x in metrics:
@@ -68,34 +74,45 @@ class reportTool(BaseTool):
             )
             response = client.run_report(request)
 
-            st=""
             for dimensionHeader in response.dimension_headers:
-                st= st+ dimensionHeader.name + " "
+                report= report+ dimensionHeader.name + " "
             for metricHeader in response.metric_headers:
-                st= st + metricHeader.name +" "
+                report= report + metricHeader.name +" "
 
-            st= st+'\n'
+            report= report+'\n'
 
             for row in response.rows:
-                for i, dimension_value in enumerate(row.dimension_values):
-                    st = st +dimension_value.value +" "
+                for dimension_value in enumerate(row.dimension_values):
+                    report = report +dimension_value.value +" "
 
-                for i, metric_value in enumerate(row.metric_values):
-                    st= st+ metric_value.value+ " "
-                st = st + '\n'
+                for metric_value in enumerate(row.metric_values):
+                    report= report+ metric_value.value+ " "
+                report = report + '\n'
 
-            self.resource_manager.write_file(filename,st)
+            if not issinglefile:
+                self.resource_manager.write_file(filename, report)
+                report=""
+
+        if issinglefile:
+            self.resource_manager.write_file(listofnames[0], report)
 
         os.remove("sample.json")
 
-        return "Succesfully wrote Google Analytics reports"
+        response = ""
+        for name in listofnames:
+            response=response +" "+ name+","
+
+        response[-1]='.'
+
+        return "Succesfully wrote"+response
 
     def returnDimMetrics(self):
         DimMetrics = []
         # try:
+        # with open("superagi/tools/marketplace_tools/googleanalytics/config.yaml", "r") as file:
         with open("superagi/tools/external_tools/google-analytics-tool-superagi/config.yaml", "r") as file:
             dict = yaml.load(file, Loader=yaml.SafeLoader)
-            for lists in dict["list"]:
+            for lists in dict["reportvariables"]:
                 DimMetrics.append([lists["Dimension"], lists["Metric"]])
             return DimMetrics
         # except:
