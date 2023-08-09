@@ -77,10 +77,10 @@ class reportTool(BaseTool):
             st= st+'\n'
 
             for row in response.rows:
-                for i, dimension_value in enumerate(row.dimension_values):
+                for dimension_value in enumerate(row.dimension_values):
                     st = st +dimension_value.value +" "
 
-                for i, metric_value in enumerate(row.metric_values):
+                for metric_value in enumerate(row.metric_values):
                     st= st+ metric_value.value+ " "
                 st = st + '\n'
 
@@ -88,7 +88,7 @@ class reportTool(BaseTool):
 
         os.remove("sample.json")
 
-        return "Succesfully wrote Google Analytics reports"
+        return "Successfully wrote Google Analytics reports to output directory"
 
     def returnDimMetrics(self):
         DimMetrics = []
