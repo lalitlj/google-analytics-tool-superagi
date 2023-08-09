@@ -77,10 +77,10 @@ class reportTool(BaseTool):
             st= st+'\n'
 
             for row in response.rows:
-                for dimension_value in enumerate(row.dimension_values):
+                for i, dimension_value in enumerate(row.dimension_values):
                     st = st +dimension_value.value +" "
 
-                for metric_value in enumerate(row.metric_values):
+                for i, metric_value in enumerate(row.metric_values):
                     st= st+ metric_value.value+ " "
                 st = st + '\n'
 
@@ -88,14 +88,14 @@ class reportTool(BaseTool):
 
         os.remove("sample.json")
 
-        return "Successfully wrote Google Analytics reports to output directory"
+        return "Succesfully wrote Google Analytics reports"
 
     def returnDimMetrics(self):
         DimMetrics = []
         # try:
         with open("superagi/tools/external_tools/google-analytics-tool-superagi/config.yaml", "r") as file:
             dict = yaml.load(file, Loader=yaml.SafeLoader)
-            for lists in dict["GOOGLE_ANALYTICS_SUMMARY_VARIABLES"]:
+            for lists in dict["list"]:
                 DimMetrics.append([lists["Dimension"], lists["Metric"]])
             return DimMetrics
         # except:
