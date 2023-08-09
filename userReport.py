@@ -82,10 +82,10 @@ class reportTool(BaseTool):
             report= report+'\n'
 
             for row in response.rows:
-                for dimension_value in enumerate(row.dimension_values):
+                for dimension_value in row.dimension_values:
                     report = report +dimension_value.value +" "
 
-                for metric_value in enumerate(row.metric_values):
+                for metric_value in row.metric_values:
                     report= report+ metric_value.value+ " "
                 report = report + '\n'
 
