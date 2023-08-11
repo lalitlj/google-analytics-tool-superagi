@@ -37,8 +37,7 @@ class GoogleAnalyticsReportTool(BaseTool):
         client = BetaAnalyticsDataClient()
         dimensions_and_metrics = self.get_dimensions_and_metrics()
 
-        if not store_report_in_single_file:
-            filenames = []
+        filenames = []
         report=""
 
         for dimensions, metrics in dimensions_and_metrics:
