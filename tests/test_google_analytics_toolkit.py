@@ -1,6 +1,9 @@
 import unittest
 from unittest.mock import patch
-from your_module import GoogleAnalyticsToolkit, GoogleAnalyticsReportTool, ToolConfiguration, ToolConfigKeyType
+from superagi.tools.base_tool import ToolConfiguration
+from ..google_analytics_toolkit import GoogleAnalyticsToolkit
+from ..google_analytics_report_tool import GoogleAnalyticsReportTool
+from superagi.types.key_type import ToolConfigKeyType
 
 
 class TestGoogleAnalyticsToolkit(unittest.TestCase):

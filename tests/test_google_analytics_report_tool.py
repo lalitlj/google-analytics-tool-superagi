@@ -1,10 +1,14 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from pydantic import ValidationError
+from ..google_analytics_report_tool import GoogleAnalyticsReportTool
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
-from superagi.tools.google_analytics_report_tool import GoogleAnalyticsReportTool, GoogleAnalyticsReportToolInput
-from google.analytics.data_v1beta.types import RunReportRequest, DateRange
-
+from google.analytics.data_v1beta.types import (
+    DateRange,
+    Dimension,
+    Metric,
+    RunReportRequest,
+)
 
 class TestAnalyticsReportTool(unittest.TestCase):
 
