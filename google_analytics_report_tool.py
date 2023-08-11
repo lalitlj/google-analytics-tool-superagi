@@ -49,11 +49,11 @@ class GoogleAnalyticsReportTool(BaseTool):
             if not store_report_in_single_file:
                 filename = self._generate_filename(dimensions, metrics, filenames)
                 filenames.append(filename)
-                self._write_to_file(filename, report)
+                self.resource_manager.write_file(filename, report)
                 report = ""
 
         if store_report_in_single_file:
-            self._write_to_file("report.txt", report)
+            self.resource_manager.write_file("report.txt", report)
 
         os.remove("credentials.json")
 
