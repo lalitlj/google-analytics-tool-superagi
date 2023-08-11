@@ -1,48 +1,61 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from google_analytics_report_tool import GoogleAnalyticsReportTool
+from pydantic import ValidationError
+from google.analytics.data_v1beta import BetaAnalyticsDataClient
+from superagi.tools.google_analytics_report_tool import GoogleAnalyticsReportTool, GoogleAnalyticsReportToolInput
+from google.analytics.data_v1beta.types import RunReportRequest, DateRange
 
 
-class TestGoogleAnalyticsReportTool(unittest.TestCase):
+class TestAnalyticsReportTool(unittest.TestCase):
 
     def setUp(self):
         self.tool = GoogleAnalyticsReportTool()
-        self.tool.resource_manager = MagicMock()
 
-    @patch('google_analytics_report_tool.BetaAnalyticsDataClient')
-    def test_execute(self, mock_client):
-        mock_run_report = MagicMock()
-        mock_client.return_value.run_report.return_value = mock_run_report
-        resp = self.tool._execute('2000-01-01', '2000-01-01', False)
-        self.assertIn("Successfully wrote", resp)
+    @patch.object(GoogleAnalyticsReportTool, 'get_dimensions_and_metrics')
+    @patch.object(GoogleAnalyticsReportTool, '_execute')
+    def test_google_analytics_report_tool(self, mock_execute, mock_get_dim_metrics):
+        mock_get_dim_metrics.return_value = [['dim1', 'dim2'], ['met1', 'met2']]
+        mock_execute.return_value = 'Success!'
+        self.tool.run('some_property_id', 'some_google_cred')
 
-    @patch('google_analytics_report_tool.json')
-    @patch('google_analytics_report_tool.os')
-    def test_set_google_credentials(self, mock_os, mock_json):
-        self.tool._set_google_credentials('dummy_cred')
-        mock_json.loads.assert_called_with('dummy_cred')
-        mock_os.environ.__setitem__.assert_called_with('GOOGLE_APPLICATION_CREDENTIALS', 'credentials.json')
+    @patch.object(GoogleAnalyticsReportTool, '_execute')
+    def test_wrong_input_type(self, mock_execute):
+        with self.assertRaises(ValidationError):
+            self.tool.run(222, 'cred')  # start_date_of_query should be string
 
-    def test_generate_filename(self):
-        filenames = ['dummymetric.txt']
-        filename = self.tool._generate_filename(['dummy'], ['metric'], filenames)
-        self.assertEqual(filename, 'dummyNewmetric.txt')
+    @patch.object(GoogleAnalyticsReportTool, '_execute')
+    def test_missing_required_fields(self, mock_execute):
+        with self.assertRaises(ValidationError):
+            self.tool.run()  # missing start_date_of_query and end_date_of_query
+
+    @patch('os.remove')
+    @patch.object(BetaAnalyticsDataClient, 'run_report')
+    @patch.object(GoogleAnalyticsReportTool, '_set_google_credentials')
+    @patch.object(GoogleAnalyticsReportTool, 'get_dimensions_and_metrics')
+    @patch.object(GoogleAnalyticsReportTool, 'get_tool_config')
+    def test_run_report_request(self, mock_tool_config, mock_get_dim_metrics, mock_set_google_cred, mock_run_report,
+                                mock_os):
+        mock_tool_config.return_value = 123456
+        mock_get_dim_metrics.return_value = [['dim1', 'dim2'], ['met1', 'met2']]
+        mock_run_report.return_value = MagicMock()
+        self.tool.run('2019-03-03', '2021-03-03', True)
 
     def test_create_run_report_request(self):
-        def_dimension = 'dummy_dimension'
-        def_metric = 'dummy_metric'
-        request = self.tool._create_run_report_request(1, [def_dimension], [def_metric], '2000-01-01', '2000-01-01')
-        self.assertEqual(request.dimensions[0].name, def_dimension)
-        self.assertEqual(request.metrics[0].name, def_metric)
-
-    @patch('google_analytics_report_tool.yaml')
-    def test_get_dimensions_and_metrics(self, mock_yaml):
-        def_side_effect(filename, Loader):
-        return {"GOOGLE_ANALYTICS_VARIABLES": [{'Dimension': 'dummyDimension', 'Metric': 'dummyMetric'}]}
-
-    mock_yaml.load.side_effect = def_side_effect
-    dimensions_and_metrics = self.tool.get_dimensions_and_metrics()
-    self.assertEqual(dimensions_and_metrics, [['dummyDimension', 'dummyMetric']])
+        dimensions = ['page_path', 'something_else']
+        metrics = ['users', 'newUsers']
+        property_id = '123456'
+        start_date_of_query = '2020-11-15'
+        end_date_of_query = '2021-11-15'
+        request = self.tool._create_run_report_request(
+            property_id,
+            dimensions,
+            metrics,
+            start_date_of_query,
+            end_date_of_query)
+        self.assertIsInstance(request, RunReportRequest)
+        self.assertIsInstance(request.date_ranges[0], DateRange)
+        self.assertEqual(request.date_ranges[0].start_date, start_date_of_query)
+        self.assertEqual(request.date_ranges[0].end_date, end_date_of_query)
 
 
 if __name__ == "__main__":
